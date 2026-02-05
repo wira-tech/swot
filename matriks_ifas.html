@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Matriks IFAS Dinamis</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: white;
+  padding: 20px;
+}
+
+.control {
+  margin-bottom: 15px;
+}
+
+.control input {
+  width: 60px;
+  padding: 4px;
+  margin-right: 10px;
+}
+
+button {
+  padding: 6px 14px;
+  cursor: pointer;
+}
+
+.next-btn {
+  position: absolute;
+  right: 35px;
+  margin-top: 0px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+th, td {
+  border: 1px solid #000;
+  padding: 6px;
+  font-size: 13px;
+}
+
+th {
+  background: #222;
+  color: white;
+}
+
+.section {
+  background: #eee;
+  font-weight: bold;
+}
+
+.total {
+  background: #f5f5f5;
+  font-weight: bold;
+  text-align: right;
+}
+
+input, textarea {
+  width: 100%;
+  border: none;
+  font-size: 13px;
+}
+
+.status {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+#btnNext {
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+#btnNext:disabled {
+  background: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
+
+.ok { color: green; }
+.bad { color: red; }
+</style>
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+
+<h3 align="center">Matriks IFAS</h3>
+
+<div class="control">
+  Kekuatan:
+  <input type="number" id="jmlStrength" value="5" min="1">
+
+  Kelemahan:
+  <input type="number" id="jmlWeakness" value="5" min="1">
+
+  <button onclick="generateTable()">Generate</button>
+</div>
+
+<div style="
+  margin-top:8px;
+  font-size:13px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+">
+
+  <!-- KIRI -->
+  <div>
+    <b>Ketentuan:</b>
+    &nbsp;&nbsp;• Total Bobot = <b>1</b>
+    &nbsp;&nbsp;&nbsp;&nbsp;• Nilai Rating Maksimal = <b>4</b>
+  </div>
+
+  <!-- KANAN -->
+  <div class="status">
+
+  </div>
+
+</div>
+
+
+<div id="areaDownload">
+<table id="ifasTable"></table>
+</div>
+
+<div style="
+  margin-top:8px;
+  font-size:13px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+">
+
+<div class="status">
+  Nilai IFAS = (Total Kekuatan + Total Kelemahan) / 2 = <b id="ifasValue">0</b>
+</div>
+
+<div class="status">
+  Total Bobot: <span id="totalBobot">0</span>
+  <span id="statusBobot" class="bad">❌ Belum 1</span>
+</div>
+</div>
+
+<div style="
+  margin-top:8px;
+  font-size:13px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+">
+
+  <!-- KIRI -->
+<button onclick="downloadPNG()">⬇️ Download PNG</button>
+ 
+
+  <!-- KANAN -->
+
+
+<button id="btnNext"
+        disabled
+		onclick="goToEFAS()">Matriks EFAS ➡️</button>
+
+
+</div>
+
+<script>
+function goToEFAS() {
+  const totalStrength = parseFloat(document.getElementById("totalStrength").innerText);
+  const totalWeakness = parseFloat(document.getElementById("totalWeakness").innerText);
+
+  localStorage.setItem("totalStrength", totalStrength);
+  localStorage.setItem("totalWeakness", totalWeakness);
+
+  window.location.href = "matriks_efas.html";
+}
+
+function generateRow() {
+  return `
+  <tr>
+    <td><textarea></textarea></td>
+    <td><input type="number" step="0.01" class="bobot"></td>
+    <td>
+  <input type="number"
+         step="0.01"
+         min="0"
+         max="4"
+         class="rating"
+         oninput="this.value = Math.min(this.value, 4)">
+</td>
+    <td class="hasil">0</td>
+  </tr>`;
+}
+
+function generateTable() {
+  const s = jmlStrength.value;
+  const w = jmlWeakness.value;
+
+  let html = `
+  <tr>
+    <th width="40%">Faktor Strategi Internal</th>
+    <th width="15%">Bobot</th>
+    <th width="15%">Rating</th>
+    <th width="15%">Bobot × Rating</th>
+  </tr>
+
+  <tr class="section"><td colspan="4">Kekuatan</td></tr>`;
+
+  for (let i = 0; i < s; i++) html += generateRow();
+
+  html += `
+  <tr class="total"><td colspan="3">Total Kekuatan</td>
+  <td id="totalStrength">0</td></tr>
+
+  <tr class="section"><td colspan="4">Kelemahan</td></tr>`;
+
+  for (let i = 0; i < w; i++) html += generateRow();
+
+  html += `
+  <tr class="total"><td colspan="3">Total Kelemahan</td>
+  <td id="totalWeakness">0</td></tr>`;
+
+  ifasTable.innerHTML = html;
+  hitung();
+}
+
+function downloadPNG() {
+  html2canvas(document.getElementById("areaDownload"), {
+    backgroundColor: "#ffffff",
+    scale: 2
+  }).then(canvas => {
+    const link = document.createElement("a");
+    link.download = "Matriks_IFAS.png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  }).catch(err => {
+    alert("Gagal download PNG");
+    console.error(err);
+  });
+}
+
+function hitung() {
+  let totalS = 0, totalW = 0, totalBobot = 0;
+  let mode = "strength";
+
+  document.querySelectorAll("#ifasTable tr").forEach(row => {
+    if (row.classList.contains("section")) {
+      mode = row.innerText.includes("Kelemahan") ? "weakness" : "strength";
+      return;
+    }
+
+    const b = row.querySelector(".bobot");
+    const r = row.querySelector(".rating");
+    const h = row.querySelector(".hasil");
+
+    if (b && r && h) {
+      const bobot = parseFloat(b.value) || 0;
+      const rating = parseFloat(r.value) || 0;
+      const nilai = bobot * rating;
+
+      h.innerText = nilai.toFixed(2);
+      totalBobot += bobot;
+      mode === "strength" ? totalS += nilai : totalW += nilai;
+    }
+  });
+
+  totalStrength.innerText = totalS.toFixed(2);
+  totalWeakness.innerText = totalW.toFixed(2);
+  ifasValue.innerText = ((totalS + totalW) / 2).toFixed(2);
+
+  totalBobotEl = document.getElementById("totalBobot");
+  statusEl = document.getElementById("statusBobot");
+
+  totalBobotEl.innerText = totalBobot.toFixed(2);
+  
+  const btnNext = document.getElementById("btnNext");
+
+  if (Math.abs(totalBobot - 1) < 0.01) {
+    statusEl.innerText = "✅ Sudah 1";
+    statusEl.className = "ok";
+	btnNext.disabled = false;
+  } else {
+    statusEl.innerText = "❌ Belum 1";
+    statusEl.className = "bad";
+	btnNext.disabled = true;
+  }
+}
+
+
+document.addEventListener("input", hitung);
+generateTable();
+
+
+
+</script>
+
+</body>
+</html>
