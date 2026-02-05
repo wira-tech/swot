@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ANALISIS SWOT</title>
+  <style>
+    * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+    body { margin: 0; background: #f4f7fb; }
+    header {
+      background: linear-gradient(135deg, #2ec4b6, #00b4d8);
+      color: #fff;
+      padding: 50px 20px;
+      text-align: center;
+    }
+    header h1 { margin-bottom: 10px; font-size: 36px; }
+    header p { font-size: 18px; opacity: .9; }
+
+    .container { max-width: 1200px; margin: -40px auto 60px; padding: 0 20px; }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 10px 25px rgba(0,0,0,.08);
+      padding: 25px;
+      text-align: center;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 35px rgba(0,0,0,.12);
+    }
+    .badge {
+      display: inline-block;
+      background: #0d3b66;
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      margin-bottom: 15px;
+    }
+    .logo {
+      font-size: 32px;
+      font-weight: bold;
+      margin: 15px 0;
+    }
+    .price { font-size: 14px; color: #666; margin-bottom: 15px; }
+    ul { list-style: none; padding: 0; margin: 0 0 20px; }
+    ul li { font-size: 14px; margin: 8px 0; }
+    .btn {
+      display: inline-block;
+      background: #e63946;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .btn:hover { opacity: .9; }
+    footer {
+      text-align: center;
+      padding: 30px 10px;
+      font-size: 14px;
+      color: #777;
+    }
+	.card.warna1 .btn { background: #dc2626; }
+	.card.warna2 .btn { background: #2563eb; }
+	.card.warna3 .btn { background: #f97316; }
+	.card.warna4 .btn { background: #16a34a; }
+	.card.warna5 .btn { background: #111827; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Analisis SWOT</h1>
+  <p>---------------</p>
+</header>
+
+<div class="container">
+  <div class="cards">
+
+    <div class="card">
+      <div class="badge">1</div>
+      <div class="logo">Matriks IFAS & EFAS</div>
+      <ul>
+        <li>✔ <a href="" target="_blank">Matriks IFAS</a></li>
+        <li>✔ <a href="" target="_blank">Matriks EFAS</a></li>
+		<li>✔ <a href="" target="_blank">Diagram SWOT</a></li>
+      </ul>
+	  <div class="card warna1">
+      <a class="btn">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  © 2026 • R. Wiranto Ekaprasetio • "wiraboy"
+</footer>
+
+</body>
+</html>
